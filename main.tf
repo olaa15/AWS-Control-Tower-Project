@@ -164,3 +164,111 @@ output "audit_framework_id" {
   value = module.audit_manager.aws_auditmanager_framework.id
 }
 */
+
+/*
+# Macie module
+module "macie" {
+  source       = "./terraform-macie-module"  # Path to your Macie module
+
+  bucket_count = 1  # Number of S3 buckets to associate
+  bucket_arns  = [
+    "arn:aws:s3:::your-s3-bucket-name"  # Replace with the ARN of your S3 bucket
+  ]
+  finding_types = ["SensitiveData", "PolicyViolations"]
+}
+
+# Outputs from the Macie module
+output "macie_session_id" {
+  description = "The ID of the Amazon Macie session."
+  value       = module.macie.macie_session_id
+}
+
+output "s3_bucket_association_ids" {
+  description = "The IDs of the associated S3 buckets."
+  value       = module.macie.s3_bucket_association_ids
+}
+*/
+
+# Security-Hub
+/*
+# Use the Security Hub module
+module "security_hub" {
+  source                       = "./terraform-security-hub-module"  # Path to your Security Hub module
+
+  service_subscription_count   = 1  # Number of services to subscribe to
+  product_arns                 = [
+    "arn:aws:securityhub:::product/aws/guardduty",  # Example product ARN for GuardDuty
+    "arn:aws:securityhub:::product/aws/config",      # Example product ARN for Config
+  ]
+
+  standard_arns = [
+    "arn:aws:securityhub:us-east-1::standards/aws-foundational-security-best-practices/v/1.0.0",
+    "arn:aws:securityhub:us-east-1::standards/aws-iam-access-analyzer/v/1.0.0"
+  ]
+}
+
+# Outputs from the Security Hub module
+output "security_hub_account_id" {
+  description = "The ID of the AWS Security Hub account."
+  value       = module.security_hub.security_hub_account_id
+}
+
+output "product_subscriptions" {
+  description = "The list of product subscriptions for the AWS Security Hub."
+  value       = module.security_hub.product_subscriptions
+}
+
+output "enabled_standards" {
+  description = "The list of standards enabled in AWS Security Hub."
+  value       = module.security_hub.enabled_standards
+}
+*/
+
+#CloudWatch
+/* 
+module "cloudwatch" {
+  source                    = "./terraform-cloudwatch-module"  # Path to your CloudWatch module
+  create_log_group          = true                              # Whether to create a log group
+  log_group_name            = "my-log-group"                   # Name of the log group
+  log_stream_name           = "my-log-stream"                  # Name of the log stream
+  create_metric_filter      = true                              # Whether to create a metric filter
+  metric_filter_name        = "my-metric-filter"               # Name of the metric filter
+  metric_filter_pattern     = "{ $.level = \"ERROR\" }"        # Example pattern for the metric filter
+  metric_transformation_name = "my-metric-transformation"       # Name of the metric transformation
+  metric_namespace          = "MyNamespace"                     # Namespace for the metric
+  metric_transformation_value = "1"                            # Value for the metric transformation
+  alarm_name                = "my-alarm"                       # Name of the alarm
+  comparison_operator       = "GreaterThanThreshold"            # Comparison operator for the alarm
+  evaluation_periods        = 1                                  # Number of periods for evaluation
+  metric_name               = "my-metric"                       # Name of the watched metric
+  period                    = 60                                 # The period in seconds
+  statistic                 = "Sum"                              # Statistic to apply
+  threshold                 = 1                                  # Threshold for the alarm
+  alarm_description         = "Trigger when errors occur"       # Description for the alarm
+  actions_enabled           = true                               # Whether to enable actions
+  alarm_actions             = []                                 # List of actions for the alarm
+  insufficient_data_actions = []                                 # Actions for insufficient data
+  ok_actions                = []                                 # Actions for OK state
+}
+
+# Outputs from the CloudWatch module
+output "log_group_name" {
+  description = "The name of the CloudWatch Log Group."
+  value       = module.cloudwatch.log_group_name
+}
+
+output "log_stream_name" {
+  description = "The name of the CloudWatch Log Stream."
+  value       = module.cloudwatch.log_stream_name
+}
+
+output "metric_filter_name" {
+  description = "The name of the created Metric Filter."
+  value       = module.cloudwatch.metric_filter_name
+}
+
+output "alarm_name" {
+  description = "The name of the created CloudWatch Alarm."
+  value       = module.cloudwatch.alarm_name
+}
+*/
